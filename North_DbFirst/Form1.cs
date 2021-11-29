@@ -12,12 +12,12 @@ namespace North_DbFirst
         private NorthwindContext _dbContext = new NorthwindContext();
         private void Form1_Load(object sender, EventArgs e)
         {
-            var query1 = _dbContext.Categories.Select(x=>new CategoryViewModel()
+            var query1 = _dbContext.Categories.Select(x => new CategoryViewModel()
             {
                 CategoryName = x.CategoryName,
-                Description=x.Description,
-                Picture=x.Picture,
-                ProductionCount=x.Products.Count
+                Description = x.Description,
+                Picture = x.Picture,
+                ProductionCount = x.Products.Count
             }).ToList();
             dgvNorth.DataSource = query1;
 
@@ -34,6 +34,13 @@ namespace North_DbFirst
                 .OrderBy(x => x.CategoryName)
                 .ThenByDescending(x => x.UnitPrice)
                 .ToList();
+            var query3 = _dbContext.Products.Select(x => new
+            {
+                x.Category.CategoryName,
+                x.ProductName,
+                x.UnitPrice
+            }).OrderBy(x => x.CategoryName).ThenByDescending(x => x.UnitPrice).ToList();
+            dgvNorth.DataSource = query3;
 
         }
     }
