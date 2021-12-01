@@ -92,7 +92,86 @@ namespace North_DbFirst
                 .ToList();
 
             RaporuGoster();
+            var query7 = from cat in _dbContext.Categories
+                         join prod in _dbContext.Products on cat.CategoryId equals prod.CategoryId
+                         join sup in _dbContext.Suppliers on prod.SupplierId equals sup.SupplierId
+                         group new 
+                         {
+                             cat,
+                             prod,
+                             sup
+
+                         }by new
+                         {
+                             cat.CategoryName,
+                             sup.CompanyName
+                         }into cats  
+                         select new
+                         {
+                             CategoryName=cats.Key.CategoryName,
+                             CompanyName=cats.Key.CompanyName,
+                             Count=cats.Count()
+                         };
+
+               dgvNorth.DataSource = query7
+                .OrderBy(x=>x.CategoryName)
+                .ThenByDescending(x=>x.Count)
+                .ToList();
+
+            var query8 = from cat in _dbContext.Categories
+                         join prod in _dbContext.Products on cat.CategoryId equals prod.CategoryId
+                         join sup in _dbContext.Suppliers on prod.SupplierId equals sup.SupplierId
+                         group new
+                         {
+                             cat,
+                             prod,
+                             sup
+
+                         } by new
+                         {
+                             cat.CategoryName,
+                             sup.CompanyName
+                         } into cats
+                         select new
+                         {
+                             CategoryName = cats.Key.CategoryName,
+                             CompanyName = cats.Key.CompanyName,
+                             Cost = cats.Sum(x=>x.prod.UnitPrice*x.prod.UnitsInStock)
+                         };
+
+            dgvNorth.DataSource = query8
+             .OrderBy(x => x.CategoryName)
+             .ThenByDescending(x => x.Cost)
+
+             .ToList();
+            //ProductName | Total Order
+            var query9 = _dbContext.OrderDetails
+                .Include(x => x.Product)
+                .GroupBy(x => new { x.Product.ProductName })
+                .Select(x => new ProductNameTotalViewModel
+                {
+                  ProductName=x.Key.ProductName,
+                   Total=x.Sum(od=>(decimal)(1-od.Discount)*od.Quantity*od.UnitPrice)
+                })
+                .OrderByDescending(x => x.Total)
+                .ToList();
+            
+            var query10 = from od in _dbContext.OrderDetails
+                          join prod in _dbContext.Products on od.ProductId equals prod.ProductId
+                          group new { od, prod } by new
+                          {
+                              prod.ProductName
+                          } into names
+                          orderby names.Key.ProductName ascending
+                          select new ProductNameTotalViewModel
+                          {
+                              ProductName = names.Key.ProductName,
+                              Total = names.Sum(x => (decimal)(1 - x.od.Discount) * x.od.Quantity * x.od.UnitPrice)
+                          };
+            dgvNorth.DataSource = query10.ToList();
             Console.WriteLine();
+
+      
 
         }
         private int _offset = 0, _pageSize = 10, _maxPage = 0;
@@ -135,6 +214,18 @@ namespace North_DbFirst
             {
                 _maxPage = (int)Math.Ceiling(query.Count() / Convert.ToDouble(_pageSize));
             }
+            query.Count(x => x.UnitPrice < 20);
+            query.Sum(x => x.UnitPrice);
+            query.Average(x => x.UnitPrice);
+            query.Max(x => x.UnitPrice);
+            query.Min(x => x.UnitPrice);
+
+            query.Any();// any true yada false dondurur nesneyi dondurmez.bos birakilirsa tabloda kayit var mi yok mu onu dondorur.
+            if (query.Any(x => x.CategoryName != "Beverages"))
+            {
+                
+            }
+
             var result = query
                 .OrderBy(x => x.CategoryName)
                 .Skip(_offset * _pageSize)
