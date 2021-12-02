@@ -166,7 +166,7 @@ namespace North_DbFirst
                           select new ProductNameTotalViewModel
                           {
                               ProductName = names.Key.ProductName,
-                              Total = names.Sum(x => (decimal)(1 - x.od.Discount) * x.od.Quantity * x.od.UnitPrice)
+                              Total =Math.Round( names.Sum(x => (decimal)(1 - x.od.Discount) * x.od.Quantity * x.od.UnitPrice),2)
                           };
             dgvNorth.DataSource = query10.ToList();
             Console.WriteLine();
