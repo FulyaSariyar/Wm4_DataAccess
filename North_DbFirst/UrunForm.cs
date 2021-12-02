@@ -29,7 +29,7 @@ namespace North_DbFirst
                 .Include(x=>x.Category)
                 .Include(x=>x.Supplier)
                 .ToList();
-            lstProducts.DisplayMember = "ProductName";
+            //lstProducts.DisplayMember = "ProductName"; Partial class sayesinde bunu yazmaya biliyoruz.
 
 
             cmbCategory.DataSource = _dbContext.Categories.ToList();

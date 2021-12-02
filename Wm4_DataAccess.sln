@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wm4_DataAccess", "Wm4_DataAccess\Wm4_DataAccess.csproj", "{149BD62F-E161-4209-8134-F7B52ABFF87B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wm4_DataAccess", "Wm4_DataAccess\Wm4_DataAccess.csproj", "{149BD62F-E161-4209-8134-F7B52ABFF87B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "North_DbFirst", "North_DbFirst\North_DbFirst.csproj", "{8A4AEEFB-D43B-458F-8043-588C58A80E69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "North_DbFirst", "North_DbFirst\North_DbFirst.csproj", "{8A4AEEFB-D43B-458F-8043-588C58A80E69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
