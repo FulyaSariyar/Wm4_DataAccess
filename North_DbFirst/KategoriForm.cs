@@ -96,7 +96,10 @@ namespace North_DbFirst
                     category.CategoryName = txtCategoryName.Text;
                     category.Description = txtDescription.Text;
 
-                    _dbContext.Categories.Update(category);
+                   // var entry = _dbContext.Entry(category);
+                    var updateEntry = _dbContext.Categories.Update(category);
+
+                    //_dbContext.Categories.Update(category);
 
                     _dbContext.SaveChanges();
 
