@@ -9,7 +9,7 @@ namespace North_DbFirst
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new UrunForm());
+            Application.Run(new SiparisForm());
         }
     }
 }
