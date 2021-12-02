@@ -9,7 +9,7 @@ namespace North_DbFirst
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new KategoriForm());
+            Application.Run(new UrunForm());
         }
     }
 }
