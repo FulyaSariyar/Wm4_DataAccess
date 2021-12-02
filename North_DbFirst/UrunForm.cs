@@ -29,7 +29,7 @@ namespace North_DbFirst
                 .Include(x=>x.Category)
                 .Include(x=>x.Supplier)
                 .ToList();
-            //lstProducts.DisplayMember = "ProductName"; Partial class sayesinde bunu yazmaya biliyoruz.
+            //lstProducts.DisplayMember = "ProductName"; //Partial class sayesinde bunu yazmaya biliyoruz.
 
 
             cmbCategory.DataSource = _dbContext.Categories.ToList();
@@ -38,7 +38,7 @@ namespace North_DbFirst
             cmbSupplier.DataSource = _dbContext.Suppliers.ToList();
             cmbSupplier.DisplayMember = "SupplierName";
         }
-        private Product _selectedProduct;
+       
         private void lstProducts_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (lstProducts.SelectedItems == null) return;
@@ -52,6 +52,42 @@ namespace North_DbFirst
             cmbSupplier.SelectedItem=_selectedProduct.Supplier;
 
         }
-       
+        private Product _selectedProduct;
+        private Category _selectedCategory;
+        private Supplier _selectedSupplier;
+
+        private void btnEkle_Click(object sender, EventArgs e)
+        {
+            if (cmbCategory.SelectedItem != null)
+                _selectedCategory = (Category)cmbCategory.SelectedItem;
+            else _selectedCategory = null;
+            if (cmbSupplier.SelectedItem != null)
+                _selectedSupplier = null;
+
+            var yeni = new Product()
+            {
+                UnitPrice = nUnitPrice.Value,
+                ProductName = txtProductName.Text,
+                Discontinued = cbDiscontuned.Checked,
+                CategoryId = _selectedCategory == null ? null : _selectedCategory.CategoryId,
+                SupplierId = _selectedSupplier?.SupplierId //ustekinin kisayol yazim sekli.
+            };
+
+            try
+            {
+                _dbContext.Products.Add(yeni);
+                _dbContext.SaveChanges();
+            }
+            catch (Exception ex )
+            {
+
+                MessageBox.Show(ex.Message);
+                _dbContext = new NorthwindContext();
+            }
+            finally
+            {
+                ListeyiDoldur();
+            }
+        }
     }
 }
