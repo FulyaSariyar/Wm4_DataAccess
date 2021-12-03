@@ -138,6 +138,7 @@ namespace North_DbFirst
 
         private void btnOnayla_Click(object sender, EventArgs e)
         {
+            if (!_sepet.Any()) return;
             using (var tran= _dbContext.Database.BeginTransaction())
             {
                 var customer = cmbCustomer.SelectedItem as Customer;
@@ -167,6 +168,8 @@ namespace North_DbFirst
 
                     foreach (var item in _sepet)
                     {
+                        if (item.Urun.ProductId == 1)
+                            throw new Exception("Çay satmiyoruz.");
                         _dbContext.OrderDetails.Add(new OrderDetail
                         {
                             Discount=0,
@@ -178,6 +181,7 @@ namespace North_DbFirst
                         });
                     }
                     _dbContext.SaveChanges();
+
                     tran.Commit();
                     MessageBox.Show($"{_sepet.Sum(x => x.AraToplam) + order.Freight:c2} tutarindaki siparişiniz{order.OrderId}" +
                         $"nolu siparişiniz başarıyla oluşturulmuştur.");
@@ -191,6 +195,7 @@ namespace North_DbFirst
 
                     tran.Rollback();
                     MessageBox.Show("Sipariş işleminizde bir hata oluştu" + ex.Message);
+                    _dbContext = new();
                 }
             }
         }
